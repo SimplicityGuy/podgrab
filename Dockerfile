@@ -1,6 +1,7 @@
-ARG GO_VERSION=1.21.6
+ARG GO_VERSION=1.24.13
+ARG ALPINE_VERSION=3.22
 
-FROM golang:${GO_VERSION}-alpine AS builder
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder
 
 RUN apk add --no-cache alpine-sdk git && \
     mkdir -p /api
@@ -13,9 +14,9 @@ RUN go mod download
 COPY . .
 RUN go build -o ./app ./main.go
 
-FROM alpine:3.21
+FROM alpine:${ALPINE_VERSION}
 
-LABEL org.opencontainers.image.source="https://github.com/akhilrex/podgrab"
+LABEL org.opencontainers.image.source="https://github.com/SimplicityGuy/podgrab"
 
 ENV CONFIG=/config
 ENV DATA=/assets
